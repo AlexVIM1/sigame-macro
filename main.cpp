@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     
     std::string nick;
     std::cout << "Enter nickname: ";
-    std::cin >> nick;
+    std::getline(std::cin, nick);
     
     auto *c = new client(choice);
     auto startExit = c->start();

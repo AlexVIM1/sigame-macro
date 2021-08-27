@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/alexey/Documents/sigame-macro/client/client.cpp
-client.h
-/home/alexey/Documents/sigame-macro/client/client.h
-
 /home/alexey/Documents/sigame-macro/client/client.h
 ../error/error.h
 /home/alexey/Documents/sigame-macro/error/error.h
@@ -18,5 +14,11 @@ webdriverxx/webdriverxx.h
 
 /home/alexey/Documents/sigame-macro/error/error.h
 iostream
+-
+
+/home/alexey/Documents/sigame-macro/main.cpp
+client/client.h
+/home/alexey/Documents/sigame-macro/client/client.h
+thread
 -
 
