@@ -1,0 +1,3 @@
+/home/alexey/Documents/sigame-macro/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/alexey/Documents/sigame-macro/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/alexey/Documents/sigame-macro/cmake-build-debug/CMakeFiles/sigame_macro.dir
