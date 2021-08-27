@@ -1,1 +1,0 @@
-/usr/bin/c++   -lcurl -g   CMakeFiles/sigame_macro.dir/main.cpp.o CMakeFiles/sigame_macro.dir/client/client.cpp.o CMakeFiles/sigame_macro.dir/error/error.cpp.o  -o sigame_macro 
