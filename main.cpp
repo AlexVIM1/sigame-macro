@@ -1,7 +1,5 @@
 #include "client/client.h"
 
-#include <thread>
-
 int main(int argc, char *argv[]) {
     BROWSER choice = FIREFOX;
     if (argv[1] == "--chrome") {

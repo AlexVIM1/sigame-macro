@@ -2,7 +2,7 @@
 // Created by alexey on 8/27/21.
 //
 
-#include "error.h"
+#include "result.h"
 
 result::result(bool success, std::string text) : itsSuccess(success), itsText(text) { }
 

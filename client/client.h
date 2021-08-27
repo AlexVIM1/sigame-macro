@@ -5,7 +5,7 @@
 #ifndef SIGAME_MACRO_CLIENT_H
 #define SIGAME_MACRO_CLIENT_H
 
-#include "../error/error.h"
+#include "../result/result.h"
 
 #include <webdriverxx/webdriverxx.h>
 
