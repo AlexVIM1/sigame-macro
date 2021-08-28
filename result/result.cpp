@@ -10,6 +10,10 @@ inline bool result::isSuccess() const {
     return itsSuccess;
 }
 
+std::string result::viewLog() {
+    return itsText;
+}
+
 void result::log() {
     if (isSuccess()) {
         std::cout << itsText;

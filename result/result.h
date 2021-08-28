@@ -12,6 +12,8 @@ class result {
 public:
     result(bool success, std::string text);
     void log();
+    std::string viewLog();
+    [[nodiscard]]
     inline bool isSuccess() const;
 private:
     bool itsSuccess;

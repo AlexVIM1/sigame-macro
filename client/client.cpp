@@ -12,32 +12,45 @@ client::~client() {
 }
 
 result client::start() {
-    if (itsBrowser == FIREFOX) {
-        webDriver = new webdriverxx::WebDriver(webdriverxx::Firefox());
-        isRunning = true;
-        return result(true, "\nSuccess.\n");
+    if (!isRunning) {
+        if (itsBrowser == FIREFOX) {
+            try {
+                webDriver = new webdriverxx::WebDriver(webdriverxx::Firefox());
+            }
+            catch (std::runtime_error &re) {
+                return result(false, "\nFailed to start WebDriver:\n\n" + std::string(re.what()));
+            }
+            isRunning = true;
+            return result(true, "\nSuccess.\n");
+        }
+        if (itsBrowser == CHROME) {
+            try {
+                webDriver = new webdriverxx::WebDriver(webdriverxx::Chrome());
+            }
+            catch (std::runtime_error &re) {
+                return result(false, std::string(re.what()));
+            }
+            isRunning = true;
+            return result(true, "\nSuccess.\n");
+        }
+        return result(false, "\nIncorrect option.\n");
     }
-    if (itsBrowser == CHROME) {
-        webDriver = new webdriverxx::WebDriver(webdriverxx::Chrome());
-        isRunning = true;
-        return result(true, "\nSuccess.\n");
-    }
-    return result(false, "\nIncorrect option.\n");
+    return result(false, "\nProgram is already running.\n");
 }
 
-result client::login(std::string &nickname) {
+result client::login(std::string nickname) {
     if (!isRunning) {
         return result(false, "\nWeb driver is not running.\n");
     }
-    webDriver->Navigate("https://vladimirkhil.com/si/online/");
     try {
+        webDriver->Navigate("https://vladimirkhil.com/si/online/");
         auto nickInput = webDriver->FindElement(webdriverxx::ById("entername"));
         nickInput.SendKeys(nickname);
         auto submit = webDriver->FindElement(webdriverxx::ById("enter"));
         submit.Click();
     }
-    catch (std::exception &ex) {
-        return result(false, ex.what());
+    catch (std::runtime_error &re) {
+        return result(false, "\nFailed to lobin SIGame:\n" + std::string(re.what()));
     }
     return result(true, "\nSuccess.\n");
 }

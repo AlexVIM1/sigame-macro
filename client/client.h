@@ -20,7 +20,7 @@ public:
     explicit client(BROWSER browser);
     ~client();
     result start();
-    result login(std::string &nickname);
+    result login(std::string nickname);
 
 private:
     bool isRunning;
