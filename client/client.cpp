@@ -4,7 +4,7 @@
 
 #include "client.h"
 
-client::client(BROWSER browser) : itsBrowser(browser), isRunning(false) { }
+client::client(BROWSER browser) : itsBrowser(browser), isRunning(false), track(false) { }
 
 client::~client() {
     delete webDriver;
@@ -65,4 +65,24 @@ result client::login(std::string nickname) {
         return result(false, "\nFailed to lobin SIGame:\n" + std::string(ex.what()));
     }
     return result(true, "\nSuccess.\n");
+}
+
+void client::tick() {
+    if (!isRunning) {
+        return;
+    }
+    auto button = webDriver->FindElement(webdriverxx::ByClass("playerButton"));
+    webdriverxx::Element anim;
+    while (track) {
+        try {
+            anim = webDriver->FindElement(webdriverxx::ByClass("topBorder"));
+        }
+        catch (std::exception &ex) {
+            continue;
+        }
+        catch (std::runtime_error &re) {
+            continue;
+        }
+        button.Click();
+    }
 }

@@ -20,8 +20,10 @@ public:
     explicit client(BROWSER browser);
     ~client();
     bool isClientRunning() const;
+    bool track;
     result start();
     result login(std::string nickname);
+    void tick();
 
 private:
     bool isRunning;

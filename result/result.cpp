@@ -6,7 +6,7 @@
 
 result::result(bool success, std::string text) : itsSuccess(success), itsText(text) { }
 
-inline bool result::isSuccess() const {
+bool result::isSuccess() const {
     return itsSuccess;
 }
 

@@ -11,6 +11,7 @@
 #include "../client/client.h"
 
 #include <iostream>
+#include <thread>
 
 class commandLine {
 public:
@@ -23,7 +24,6 @@ public COMMANDS:
     result start();
     
 private:
-    bool track;
     bool listen;
     unsigned short int level;
     std::string helpMessage;

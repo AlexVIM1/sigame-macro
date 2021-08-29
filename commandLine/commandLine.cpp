@@ -4,7 +4,7 @@
 
 #include "commandLine.h"
 
-commandLine::commandLine(int c, char *v[]) : level(0), listen(true), track(false), prompt("\ncommand$ "),
+commandLine::commandLine(int c, char *v[]) : level(0), listen(true), prompt("\ncommand$ "),
                                             helpMessage("\nNormal mode:\n"
                                                         "'start' - starts WebDriver and opens SIGame.\n"
                                                         "'macro-mode' - entering macro-mode with own commands (read below).\n"
@@ -60,7 +60,7 @@ result commandLine::execute(std::string cmd) {
                 return result(false, this->start().viewLog());
             case 1:
                 if (webClient->isClientRunning()) {
-                    prompt = "\ncommand<macro-mode>$ ";
+                    prompt = "\ncommand<macro-mode:disabled>$ ";
                     level = 1;
                     return result(true,
                                   "\nEntered to macro-mode.\nEnter any key to enable/disable red-button tracking.\nEnter 'exit' to quit macro-mode.\n");
@@ -84,13 +84,24 @@ result commandLine::execute(std::string cmd) {
                 level = 0;
                 return result(true, "\nTracking and pushing red-button disabled.\nQuiting macro-mode...\n");
             default:
-                if (track) {
-                    track = false;
-                    return result(true, "\nTracking and pushing red-button disabled.\n");
+                if (!webClient->track) {
+                    prompt = "\ncommand<macro-mode:enabled>$ ";
+                    webClient->track = true;
+                    level = 2;
+                    std::thread th([&] {
+                        webClient->tick();
+                    });
+                    th.detach();
+                    return result(true, "\nTracking and pushing red-button enabled.\n");
                 }
-                track = true;
-                return result(true, "\nTracking and pushing red-button enabled.\n");
         }
+    }
+
+    else if (level == 2) {
+        prompt = "\ncommand<macro-mode:disabled>$ ";
+        level = 1;
+        webClient->track = false;
+        return result(true, "\nTracking and pushing red-button disabled.\nQuiting macro-mode...\n");
     }
     
     return result(true, "\nSuccess.\n");

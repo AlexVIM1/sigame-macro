@@ -14,7 +14,7 @@ public:
     void log();
     std::string viewLog();
     [[nodiscard]]
-    inline bool isSuccess() const;
+    bool isSuccess() const;
 private:
     bool itsSuccess;
     std::string itsText;
