@@ -5,6 +5,6 @@ Application for auto-submitting the "red-button" to answer in SIGame by Vladimir
     git clone https://github.com/AlexVIM1/sigame-macro.git  
     cd sigame-macro  
     mkdir build  
-     cd build  
+    cd build  
     cmake ..  
     make 
