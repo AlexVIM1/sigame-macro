@@ -19,6 +19,7 @@ class client {
 public:
     explicit client(BROWSER browser);
     ~client();
+    bool isClientRunning() const;
     result start();
     result login(std::string nickname);
 

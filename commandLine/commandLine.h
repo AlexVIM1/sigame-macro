@@ -14,7 +14,7 @@
 
 class commandLine {
 public:
-    commandLine(int c, char *v[], std::string prompt);
+    commandLine(int c, char *v[]);
     ~commandLine();
     result execute(std::string cmd);
     void init();
@@ -23,7 +23,10 @@ public COMMANDS:
     result start();
     
 private:
+    bool track;
+    bool listen;
     unsigned short int level;
+    std::string helpMessage;
     std::string prompt;
     std::string commands[4] = { "start", "macro-mode", "exit", "help" };
     client *webClient;

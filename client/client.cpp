@@ -7,8 +7,11 @@
 client::client(BROWSER browser) : itsBrowser(browser), isRunning(false) { }
 
 client::~client() {
-    std::cerr << "\nclient::~client()\n";
     delete webDriver;
+}
+
+bool client::isClientRunning() const {
+    return isRunning;
 }
 
 result client::start() {
@@ -18,7 +21,10 @@ result client::start() {
                 webDriver = new webdriverxx::WebDriver(webdriverxx::Firefox());
             }
             catch (std::runtime_error &re) {
-                return result(false, "\nFailed to start WebDriver:\n\n" + std::string(re.what()));
+                return result(false, "\nFailed to start WebDriver:\n" + std::string(re.what()));
+            }
+            catch (std::exception &ex) {
+                return result(false, "\nFailed to start WebDriver:\n" + std::string(ex.what()));
             }
             isRunning = true;
             return result(true, "\nSuccess.\n");
@@ -30,6 +36,9 @@ result client::start() {
             catch (std::runtime_error &re) {
                 return result(false, std::string(re.what()));
             }
+            catch (std::exception &ex) {
+                return result(false, std::string(ex.what()));
+            }
             isRunning = true;
             return result(true, "\nSuccess.\n");
         }
@@ -40,7 +49,7 @@ result client::start() {
 
 result client::login(std::string nickname) {
     if (!isRunning) {
-        return result(false, "\nWeb driver is not running.\n");
+        return result(false, "\nWebRriver (client) is not running. Try to 'start'.\n");
     }
     try {
         webDriver->Navigate("https://vladimirkhil.com/si/online/");
@@ -51,6 +60,9 @@ result client::login(std::string nickname) {
     }
     catch (std::runtime_error &re) {
         return result(false, "\nFailed to lobin SIGame:\n" + std::string(re.what()));
+    }
+    catch (std::exception &ex) {
+        return result(false, "\nFailed to lobin SIGame:\n" + std::string(ex.what()));
     }
     return result(true, "\nSuccess.\n");
 }

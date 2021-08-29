@@ -4,10 +4,22 @@
 
 #include "commandLine.h"
 
-commandLine::commandLine(int c, char *v[], std::string prompt) : level(0), prompt(prompt) {
+commandLine::commandLine(int c, char *v[]) : level(0), listen(true), track(false), prompt("\ncommand$ "),
+                                            helpMessage("\nNormal mode:\n"
+                                                        "'start' - starts WebDriver and opens SIGame.\n"
+                                                        "'macro-mode' - entering macro-mode with own commands (read below).\n"
+                                                        "'exit' - closes the program.\n"
+                                                        "'help' - displays this message\n"
+                                                        "\nMacro-mode:\n"
+                                                        "[any message] - enables (or disables whether it already has enabled) handler that checking is you may answer and pushing red button if it is.\n"
+                                                        "'exit' - switches macro-mode to normal mode.\n"
+                                                        "\nsigame-macro  Copyright (C) 2021  Alexey Zlobin (alexvim / AlexVIM1)\n"
+                                                        "Licensed by GPLv3\n"
+                                                        "\nvk.com/alexvimdev\n"
+                                                        "github.com/AlexVIM1/sigame-macro\n") {
     BROWSER choice = FIREFOX;
-    if (c > 0) {
-        if (v[1] == "--chrome") {
+    if (c > 1) {
+        if (std::string(v[1]) == "--chrome") {
             choice = CHROME;
         }
     }
@@ -20,7 +32,7 @@ commandLine::~commandLine() {
 
 result commandLine::start() {
     std::string nick;
-    std::cout << "Enter nickname: ";
+    std::cout << "\nEnter nickname: ";
     std::getline(std::cin, nick);
     auto startExit = webClient->start();
     if (!startExit.isSuccess()) {
@@ -42,28 +54,55 @@ result commandLine::execute(std::string cmd) {
         }
     }
     
-    switch (command) {
-        case 0:
-            this->start().log();
-            break;
-        case 1:
-        case 2:
-        case 3:
-        default:
-            return result(false, "\nIncorrect command (127).\n");
+    if (level == 0) {
+        switch (command) {
+            case 0:
+                return result(false, this->start().viewLog());
+            case 1:
+                if (webClient->isClientRunning()) {
+                    prompt = "\ncommand<macro-mode>$ ";
+                    level = 1;
+                    return result(true,
+                                  "\nEntered to macro-mode.\nEnter any key to enable/disable red-button tracking.\nEnter 'exit' to quit macro-mode.\n");
+                }
+                return result(false,"\nFailed to enter macro-mode:\nWebDriver (client) in not running. Try to 'start'.\n");
+            case 2:
+                level = -1;
+                listen = false;
+                return result(true, "\nQuiting program...\n");
+            case 3:
+                std::cout << helpMessage;
+                return result(true,"");
+            default:
+                return result(false, "\nIncorrect command (127).\n");
+        }
+    }
+    else if (level == 1) {
+        switch (command) {
+            case 2:
+                prompt = "\ncommand$ ";
+                level = 0;
+                return result(true, "\nTracking and pushing red-button disabled.\nQuiting macro-mode...\n");
+            default:
+                if (track) {
+                    track = false;
+                    return result(true, "\nTracking and pushing red-button disabled.\n");
+                }
+                track = true;
+                return result(true, "\nTracking and pushing red-button enabled.\n");
+        }
     }
     
     return result(true, "\nSuccess.\n");
 }
 
 void commandLine::init() {
+    std::cout << helpMessage;
     std::string com;
-    while (true) {
+    while (listen) {
         std::cout << prompt;
         std::getline(std::cin, com);
         auto executeExit = execute(com);
-        if (!executeExit.isSuccess()) {
-            executeExit.log();
-        }
+        executeExit.log();
     }
 }
