@@ -16,12 +16,11 @@ commandLine::commandLine(int c, char *v[]) : level(0), listen(true), prompt("\nc
                                                         "\nsigame-macro  Copyright (C) 2021  Alexey Zlobin (alexvim / AlexVIM1)\n"
                                                         "Licensed by GPLv3\n"
                                                         "\nvk.com/alexvimdev\n"
+                                                        "gitlab.com/alexvim/sigame-macro\n"
                                                         "github.com/AlexVIM1/sigame-macro\n") {
     BROWSER choice = FIREFOX;
-    if (c > 1) {
-        if (std::string(v[1]) == "--chrome") {
-            choice = CHROME;
-        }
+    if (c > 1 && std::string(v[1]) == "--chrome") {
+        choice = CHROME;
     }
     webClient = new client(choice);
 }
@@ -101,7 +100,7 @@ result commandLine::execute(std::string cmd) {
         prompt = "\ncommand<macro-mode:disabled>$ ";
         level = 1;
         webClient->track = false;
-        return result(true, "\nTracking and pushing red-button disabled.\nQuiting macro-mode...\n");
+        return result(true, "\nTracking and pushing red-button disabled.\n");
     }
     
     return result(true, "\nSuccess.\n");

@@ -71,7 +71,16 @@ void client::tick() {
     if (!isRunning) {
         return;
     }
-    auto button = webDriver->FindElement(webdriverxx::ByClass("playerButton"));
+    webdriverxx::Element button;
+    try {
+        button = webDriver->FindElement(webdriverxx::ByClass("playerButton"));
+    }
+    catch (std::exception &ex) {
+        return;
+    }
+    catch (std::runtime_error &re) {
+        return;
+    }
     webdriverxx::Element anim;
     while (track) {
         try {
